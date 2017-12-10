@@ -1,7 +1,7 @@
 const FB = require('fbgraph')
 const axios = require('axios')
 const param = require('jquery-param')
-const firebaseInit = require('./firebase-settings.js')
+const { env, admin, functions} = require('./firebase-settings.js')
 
 const functions = firebaseInit.functions
 const admin = firebaseInit.admin
@@ -9,12 +9,10 @@ const env = firebaseInit.env
 const db = admin.database()
 
 const storage = require('@google-cloud/storage')
-const serviceAccount = require('./credential/tuangnee-credential.json')
 
-const gcs = storage({
-    projectId: 'tuangnee',
-    keyFilename: './credential/tuangnee-credential.json'
-  });
+const gcs = new storage({
+  projectId: 'tuangnee'
+});
 
 // Reference an existing bucket.
 const bucket = gcs.bucket('tuangnee' + '.appspot.com')
@@ -101,70 +99,9 @@ exports.taungNeeHooker = functions.https.onRequest((req, res) => {
 
 // -------------------- WEB API
 
-// exports.addNewUserFromWeb = functions.https.onRequest((req, res) => {
-// 	cors(req, res, () => {
-// 		httpsFunctions.addNewUserFromWeb(req, res, env.messenger)
-// 	})
-// })
-
-
 
 
 // ------------------- Messenger Function
-
-function sendBatchMessage (reqPack) {
-	sendBatchMessageWithDelay(reqPack, 0)
-}
-
-function sendBatchMessageWithDelay (reqPack, delay) {
-
-	// REQUEST FORMAT (reqPack must be array of data like this)
-	/*
-
-		let bodyData = {
-			recipient: {
-				id: user.fbid
-			},
-			message: {
-				text: `สวัสดี ${user.firstName} ทดสอบอีกที`
-			}
-		}
-
-		requests.push({
-			method: 'POST',
-			relative_url: 'me/messages?include_headers=false',
-			body: param(bodyData)
-		})
-	*/
-
-	// batch allow 50 commands per request, read this : https://developers.facebook.com/docs/graph-api/making-multiple-requests/
-	let batchLimit = 50
-
-	for (let i = 0; i < reqPack.length; i += batchLimit) {
-
-		setTimeout( function () {
-
-			FB.batch(reqPack.slice(i, i + batchLimit), (error, res) => {
-				if (error) {
-					console.log(`\n batch [${i}] error : ${JSON.stringify(error)} \n`)
-				} else {
-					console.log(`batch [${i}] / no error : `)
-					let time = new Date()
-					let date = time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate()
-					let epochTime = time.getTime()
-
-					res.forEach(response => {
-						db.ref(`batchLogs/${date}/${epochTime}`).push().set(response['body'])
-						console.log(response['body'])
-					})
-				}
-			})
-
-		}, delay )
-
-	}
-
-}
 
 
 function sendQuickReplies (recipientId, quickReplies) {

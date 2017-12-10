@@ -6,18 +6,8 @@ const axios = require('axios')
 
 const db = firebaseInit.admin.database()
 
-module.exports = function (util, messengerFunctions) {
 
-	let module = {}
 
-	module.getParticipants = function (req, res) {
-
-		// ----
-
-	}
-
-  // --------- END HERE
-
-  return module
+module.exports = {
 
 }
