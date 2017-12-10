@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <title>Quiz Result</title>
+    <style>
+      span {
+        font-size: 28px;
+      }
+      span.redText {
+        color: red;
+      }
+      .centerAll {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <% if(showMenu) { %> <% include include/header.ejs %> <% } %>
+    <% if(error) { %>
+
+      error: <%=error%>
+
+    <% } else { %>
+      <div style="margin-left: auto; margin-right: auto; max-width: 1280px"><br />
+        <h2 style="text-align: center;">Score Result</h2><br /><br />
+        <table class="centerAll">
+          <% for(let i = 0; i < result.length; i++) { %>
+            <tr>
+              <td style="padding: 4px 5px 4px 5px">
+                <%=i+1%>.
+              </td>
+              <td style="padding: 4px 5px 4px 5px">
+                <img style="vertical-align: middle" src="<%=result[i].profilePic%>" width="50" heigth="50">
+              </td>
+              <td style="padding: 4px 12px 4px 12px">
+                <span><%=result[i].name%></span>
+              </td>
+              <td style="padding: 4px 5px 4px 5px">
+                ได้คะแนนรวม
+              </td>
+              <td style="padding: 4px 12px 4px 12px">
+                <span class="redText"><%=result[i].point%></span>
+              </td>
+            </tr>
+          <% } %>
+        </table>
+      </div>
+
+    <% } %>
+
+    <script>
+      // let a = true
+      //
+      // setInterval(function(){
+      //   console.log(a);
+      //   if(a) document.body.style.backgroundColor = "white"
+      //   else document.body.style.backgroundColor = "yellow"
+      //
+      //   a = !a
+      //
+      // }, 100)
+    </script>
+  </body>
+</html>

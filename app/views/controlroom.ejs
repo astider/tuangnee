@@ -1,0 +1,121 @@
+<html>
+  <head>
+    <title>Quiz Control Room</title>
+  </head>
+  <body>
+    <% include include/header.ejs %>
+    <br />
+
+    <div style="text-align: center">
+
+      Prepare Quiz :
+      <% if(readyToStart) { %>
+        <font id="ready" color="#00ff00">RUNNING</font>
+      <% } else if(isQuizEnd){ %>
+        <font id="ready" color="blue">Quiz End</font>
+      <% } else { %>
+        <font id="ready" color="red">WAIT FOR ACTION</font>
+      <% } %>
+
+      <% if(!readyToStart && !isQuizEnd) { %>
+        <button id="prepareButton" onclick="changeReadyToStartAJAX()"> Run </button>
+      <% } %>
+      <br /><br /><br />
+
+      Enter Status :
+      <% if(enterTime) { %>
+        <font id="enterStatus" color="#00ff00">OPEN</font>
+      <% } else { %>
+        <font id="enterStatus" color="red">CLOSE</font>
+      <% } %>
+      <br /><br />
+
+      <div id="enterTimeButton">
+        <% if(!readyToStart) { %>
+          <button id="controlEnterTime" onclick="" disabled>Open Enter Session</button
+        <% } else { %>
+
+          <% if(enterTime) { %>
+            <button id="controlEnterTime" onclick="changeEnterStatus('close')">Close Enter Session</button>
+          <% } else { %>
+
+            <% if(isQuizOnline) { %>
+              <button id="controlEnterTime" onclick="changeEnterStatus('open')" disabled>Open Enter Session</button>
+            <% } else { %>
+              <button id="controlEnterTime" onclick="changeEnterStatus('open')">Open Enter Session</button>
+            <% } %>
+
+          <% } %>
+        <% } %>
+      </div>
+
+      <br /><br />
+
+      Quiz Status :
+      <% if(isQuizOnline) { %>
+        <font id="quizOnlineStatus" color="#00ff00">ONLINE</font>
+      <% } else { %>
+        <font id="quizOnlineStatus" color="red">OFFLINE</font>
+      <% } %>
+
+      <div id="startQuizButton">
+        <% if(openedAtLeastOneTime && !isQuizEnd && !isQuizOnline) { %>
+          <button id="controlStartQuiz" onclick="startQuiz()" > Start Quiz </button>
+        <% } else { %>
+          <button id="controlStartQuiz" onclick="startQuiz()" disabled> Start Quiz </button>
+        <% } %>
+      </div>
+
+      <br />
+      <br />
+
+      สถานะของคำถามแต่ละข้อ :
+      <br />
+
+      <% if(quizReady) { %>
+
+        <div id="quizReadyStatus">
+          <br /><br />
+          <% quizReady.forEach((status, index)=>{ %>
+
+            <%=index+1%>.
+            <% if(status) { %>
+              <span id="q<%=index+1%>Status" style="color: #00ff00"><strong>ACTIVATED</strong></span>
+              <button id="q<%=index+1%>Button" onclick="" disabled> activated </button>
+            <% } else { %>
+              <span id="q<%=index+1%>Status" style="color: #ff0000"><strong>Inactive</strong></span>
+
+              <% if(isQuizOnline) { %>
+                <button id="q<%=index+1%>Button" onclick="qActivate(<%=index+1%>)"> Activate </button>
+              <% } else { %>
+                <button id="q<%=index+1%>Button" onclick="qActivate(<%=index+1%>)" disabled> Activate </button>
+              <% } %>
+
+            <% } %>
+            <br /><br /><br />
+
+          <% }) %>
+
+        </div>
+
+      <% } else { %>
+        <div id="quizReadyStatus" ><strong>NO</strong></div>
+      <% } %>
+
+      <br /><br /><br /><br />
+      <% if(isQuizOnline && quizReady[quizReady.length - 1]) { %>
+
+        <button id="endingButton" onclick="endIt()">END QUIZ</button>
+
+      <% } else { %>
+
+        <button id="endingButton" onclick="" disabled>END QUIZ</button>
+
+      <% } %>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/js/control.js"></script>
+  </body>
+</html>
