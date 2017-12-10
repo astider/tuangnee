@@ -1,7 +1,5 @@
-node_modules
 npm-debug.log
 .env
-functions/credential/*
-lab/
+functions/node_modules/*
 functions/test.js
 functions/qr.png
