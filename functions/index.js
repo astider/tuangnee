@@ -2,32 +2,18 @@ const FB = require('fbgraph')
 const axios = require('axios')
 const param = require('jquery-param')
 const { env, admin, functions} = require('./firebase-settings.js')
-
-const functions = firebaseInit.functions
-const admin = firebaseInit.admin
-const env = firebaseInit.env
 const db = admin.database()
-
-const storage = require('@google-cloud/storage')
-
-const gcs = new storage({
-  projectId: 'tuangnee'
-});
-
-// Reference an existing bucket.
-const bucket = gcs.bucket('tuangnee' + '.appspot.com')
-
-
-const messengerAPI = require('./API/messengerProfile.js')
-const userManagementAPI = require('./API/userManagement.js')
-const cors = require('cors')({
-	origin: ['http://localhost:3000']
-})
-
 const qrcode = require('qrcode')
 const promptPayload = require('promptpay-qr')
 const qrimg = require('node-qr-image')
 
+const storage = require('@google-cloud/storage')
+const gcs = new storage({
+  projectId: 'tuangnee'
+})
+const bucket = gcs.bucket('tuangnee' + '.appspot.com')
+
+const messengerAPI = require('./API/messengerProfile.js')
 FB.setAccessToken(env.messenger.page_token)
 
 console.log('STARTING SERVICE')
